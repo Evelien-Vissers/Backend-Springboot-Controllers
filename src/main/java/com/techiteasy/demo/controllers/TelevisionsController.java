@@ -3,11 +3,7 @@ package com.techiteasy.demo.controllers;
 import com.techiteasy.demo.exceptions.RecordNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 //Stap 2: voorzie de klasse van de juiste annotatie
 @RestController
@@ -16,52 +12,54 @@ import java.util.Map;
 //Deze klasse bevat alle gevraagde CRUD-endpoints
 public class TelevisionsController {
 
-    //Deze mock is een tijdelijke oplossing om data in het geheugen op te slaan, zodat de functionaliteit van de controller getest kan worden zonder een database of externe opslag te gebruiken. De 'Map<Long, String> is hier gebruikt als een soort van database.
-    //De Map<Long, String> is een Java Map die tv-gegevens opslaat - het gebruikt een 'Long' als sleutel (= het ID van de tv) en een String als waarde (= details van de tv).
-    //De 'new HashMap<>()' maakt een lege HashMap aan, die je kan gebruiken om tv's op te slaan.
-    private final Map<Long, String> televisions = new HashMap<>(); //Ik heb dit 'final' gemaakt om duidelijk te maken dat de referentie naar het Map-object onveranderlijk is na initiele toewijzing (oa voor betere leesbaarheid van de code en het evt. per ongeluk her-toewijzen van het veld elders in de code).
+    //Deze mock is een tijdelijke oplossing om data in het geheugen op te slaan, zodat de functionaliteit van de controller getest kan worden zonder een database of externe opslag te gebruiken.
+    private final List<String> televisionDataBase = new ArrayList<>(Arrays.asList("Samsung", "Sony", "LG")); //Ik heb dit 'final' gemaakt om duidelijk te maken dat de referentie naar het Map-object onveranderlijk is na initiele toewijzing (oa voor betere leesbaarheid van de code en het evt. per ongeluk her-toewijzen van het veld elders in de code).
 
     //Stap 3: Voeg requests toe met ResponseEntity
     // GET - request voor alle televisies
     @GetMapping
     public ResponseEntity<List<String>> getAllTelevisions() {
-        return ResponseEntity.ok(new ArrayList<>(televisions.values())); //hier worden alle waarden (details van tv's uit de 'Map' gehaald met 'televeision.values()' en omgezet in een ArrayList. Dit geeft een lijst van tv's terug.
+        return ResponseEntity.ok(televisionDataBase); //hier worden alle waarden (details van tv's uit de 'Map' gehaald met 'televeision.values()' en omgezet in een ArrayList. Dit geeft een lijst van tv's terug - ResponseEntity.ok voor lijst van tv's
     }
+
     // GET - request voor 1 televisie
     @GetMapping("/{id}")
-    public ResponseEntity<String> getTelevisionById(@PathVariable Long id) {
-        String television = televisions.get(id); //Dit zoekt naar de tv met het opgegeven 'id' in de 'Map'. Wanneer deze niet bestaat, krijg je 'null' terug (wat wordt afgehandeld met een exception).
-        if (television == null) {
+    public ResponseEntity<String> getTelevisionById(@PathVariable int id) {
+        //String television = televisionDataBase.get(id); //Dit zoekt naar de tv met het opgegeven 'id'. Wanneer deze niet bestaat, krijg je 'null' terug (wat wordt afgehandeld met een exception).
+        if (id < 0 || id > televisionDataBase.size() || televisionDataBase.get(id) == null) {
             throw new RecordNotFoundException("Television not found with ID: " + id);
         }
-        return ResponseEntity.ok(television);
+        String television = televisionDataBase.get(id);
+        return ResponseEntity.ok(television); //ResponseEntity.ok voor individuele tv
     }
+
     // POST - request voor het aanmaken van 1 televisie
     @PostMapping
     public ResponseEntity<String> createTelevision(@RequestBody String televisionDetails) {
-        long id = televisions.size() + 1; //Hier wordt een nieuw 'id' gegenereerd door de grootte van de 'Map' te nemen en er 1 bij op te tellen.
-        televisions.put(id, televisionDetails); //Hier wordt de nieuwe tv toegevoegd aan de 'Map' met dit nieuwe id.
-        return ResponseEntity.status(201).body("Television created: " + id);
-}
+        if (televisionDetails.length() > 20) {
+            throw new TelevisionNameTooLongException("Television name exceeds the maximum length of 20 characters");
+        }
+        televisionDataBase.add(televisionDetails);
+        return ResponseEntity.created(null).body("Television added: " + televisionDetails); //ResponseEntity.created bij succesvolle creatie
+    }
 
     // PUT-request voor het updaten van 1 tv
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateTelevision(@PathVariable Long id, @RequestBody String updatedTelevisionDetails) {
-        if (!televisions.containsKey(id)) {
+    public ResponseEntity<String> updateTelevision(@PathVariable int id, @RequestBody String updatedTelevisionDetails) {
+        if (id < 0 || id >= televisionDataBase.size() || televisionDataBase.get(id) == null) {
             throw new RecordNotFoundException("Television not found with ID: " + id);
         }
-        televisions.put(id, updatedTelevisionDetails); //Dit vervangt de bestaande tv met het opgegeven 'id' door de nieuwe gegevens in de 'Map'
-        return ResponseEntity.ok("Television updated with ID: " + id);
+        televisionDataBase.set(id, updatedTelevisionDetails);
+        return ResponseEntity.ok().body("Television updated at index " + id + ": " + updatedTelevisionDetails);
     }
 
     // DELETE - request voor het verwijderen van 1 televisie
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTelevision(@PathVariable Long id) {
-        if (!televisions.containsKey(id)) {
-            throw new RecordNotFoundException("Television not found with ID: " + id);
+    public ResponseEntity<Void> deleteTelevision(@PathVariable int id) {
+        if (id < 0 || id >= televisionDataBase.size() || televisionDataBase.get(id) == null) {
+           throw new RecordNotFoundException("Television not found with ID: " + id);
         }
-        televisions.remove(id);
+        televisionDataBase.set(id, null);
         return ResponseEntity.noContent().build();
-
-}
+    }
 }
