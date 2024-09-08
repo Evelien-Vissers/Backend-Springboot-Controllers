@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+//Deze klasse behandelt uitzonderingen (zoals de RecordNotFoundException)
 @Controller // Stap 5: voorzie deze klasse van de juiste annotatie
 public class ExceptionController {
 
