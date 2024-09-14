@@ -4,10 +4,12 @@ import com.techiteasy.demo.exceptions.RecordNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
+//Controllers bevatten de endpoints en zijn verantwoordelijk voor het afhandelen van inkomende HTTP-verzoeken
 
 //Stap 2: voorzie de klasse van de juiste annotatie
 @RestController
-@RequestMapping
+@RequestMapping("/televisions")
+//Notitie MR: RequestMapping heeft an sich geen toegevoegde waarde. Als je echter ("/televisions") erachter invult, dan komt jouw "getAllTelevisions" op het pad "localhost:8080/televisions" (ipv alleen op "localhost:8080"). [Daarom nu "/televisions" erachter gezet.
 
 //Deze klasse bevat alle gevraagde CRUD-endpoints
 public class TelevisionsController {
@@ -59,7 +61,7 @@ public class TelevisionsController {
         if (id < 0 || id >= televisionDataBase.size() || televisionDataBase.get(id) == null) {
            throw new RecordNotFoundException("Television not found with ID: " + id);
         }
-        televisionDataBase.set(id, null);
+        televisionDataBase.set(id, null); //Notitie MR: idd goed om hier .set(id, null) te gebruiken ipv .remove(id) - dat zou namelijk de volgorde van je lijst veranderen en dus elke tv een nieuwe id geven - dat kan in een database niet.
         return ResponseEntity.noContent().build();
     }
 }
