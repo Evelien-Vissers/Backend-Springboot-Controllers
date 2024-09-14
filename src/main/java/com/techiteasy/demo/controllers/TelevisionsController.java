@@ -1,6 +1,7 @@
 package com.techiteasy.demo.controllers;
 
 import com.techiteasy.demo.exceptions.RecordNotFoundException;
+import com.techiteasy.demo.exceptions.TelevisionNameTooLongException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
@@ -32,7 +33,7 @@ public class TelevisionsController {
             throw new RecordNotFoundException("Television not found with ID: " + id);
         }
         String television = televisionDataBase.get(id);
-        return ResponseEntity.ok(television); //ResponseEntity.ok voor individuele tv
+        return ResponseEntity.ok("television"); //ResponseEntity.ok voor individuele tv
     }
 
     // POST - request voor het aanmaken van 1 televisie

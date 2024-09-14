@@ -1,5 +1,7 @@
 package com.techiteasy.demo.repositories;
-//De 'repositories' bevatten de interfaces die de database-interactie mogelijk maken (vaak dmv Spring Data JPA)
 
-public class TelevisionRepository {
+import com.techiteasy.demo.models.Television;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TelevisionRepository extends JpaRepository<Television, Long> {
 }
