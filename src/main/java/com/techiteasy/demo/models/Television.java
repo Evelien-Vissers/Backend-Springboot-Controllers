@@ -5,18 +5,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDate;
 
 //@Entity markeert deze klasse als een JPA-entiteit (wat betekent dat deze overeenkomst met een tabel in de database)
 @Entity
 public class Television {
 
     @Id //Dit attribuut geeft aan dat het veld 'id' de primaire sleutel is.
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //Deze annotatie zorgt ervoor dat de waarde van 'id' automatisch wordt gegenereerd door de database wanneer een nieuwe rij wordt ingevoegd
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //Deze annotatie zorgt ervoor dat de waarde van 'id' automatisch wordt gegenereerd door de database wanneer een nieuwe rij wordt ingevoegd
     private long id;
     private String type;
     private String brand;
     private String name;
     private Double price;
+    private LocalDate purchaseDate;
+    private LocalDate saleDate;
     private Double availableSize;
     private Integer refreshRate;
     private String screenType;
@@ -34,8 +38,9 @@ public class Television {
     public Television() {
 
     }
+
     //Constructor met parameters - initialiseert specifieke waarden
-    public Television(String type, String brand, String name, Double price, Double availableSize, Integer refreshRate, String screenType, String screenQuality, Boolean smartTv, Boolean wifi, Boolean voiceControl, Boolean hdr, Boolean bluetooth, Integer originalStock, Integer sold) {
+    public Television(String type, String brand, String name, Double price, Double availableSize, Integer refreshRate, String screenType, String screenQuality, Boolean smartTv, Boolean wifi, Boolean voiceControl, Boolean hdr, Boolean bluetooth, Boolean ambilight, Integer originalStock, Integer sold) {
         this.type = type;
         this.brand = brand;
         this.name = name;
@@ -49,6 +54,7 @@ public class Television {
         this.voiceControl = voiceControl;
         this.hdr = hdr;
         this.bluetooth = bluetooth;
+        this.ambilight = ambilight;
         this.originalStock = originalStock;
         this.sold = sold;
     }
@@ -59,99 +65,138 @@ public class Television {
     public long getId() {
         return id;
     }
+
     public void setId(long id) {
         this.id = id;
     }
+
     public String getType() {
         return type;
     }
+
     public void setType(String type) {
         this.type = type;
     }
+
     public String getBrand() {
         return brand;
     }
+
     public void setBrand(String brand) {
         this.brand = brand;
     }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public Double getPrice() {
         return price;
     }
+
     public void setPrice(Double price) {
         this.price = price;
     }
+
     public Double getAvailableSize() {
         return availableSize;
     }
+
     public void setAvailableSize(Double availableSize) {
         this.availableSize = availableSize;
     }
+
     public Integer getRefreshRate() {
         return refreshRate;
     }
+
     public void setRefreshRate(Integer refreshRate) {
         this.refreshRate = refreshRate;
     }
+
     public String getScreenType() {
         return screenType;
     }
+
     public void setScreenType(String screenType) {
         this.screenType = screenType;
     }
+
     public String getScreenQuality() {
         return screenQuality;
     }
+
     public void setScreenQuality(String screenQuality) {
         this.screenQuality = screenQuality;
     }
+
     public Boolean getSmartTv() {
         return smartTv;
     }
+
     public void setSmartTv(Boolean smartTv) {
         this.smartTv = smartTv;
     }
+
     public Boolean getWifi() {
         return wifi;
     }
+
     public void setWifi(Boolean wifi) {
         this.wifi = wifi;
     }
+
     public Boolean getVoiceControl() {
         return voiceControl;
     }
+
     public void setVoiceControl(Boolean voiceControl) {
         this.voiceControl = voiceControl;
     }
+
     public Boolean getHdr() {
         return hdr;
     }
+
     public void setHdr(Boolean hdr) {
         this.hdr = hdr;
     }
+
     public Boolean getBluetooth() {
         return bluetooth;
     }
+
     public void setBluetooth(Boolean bluetooth) {
         this.bluetooth = bluetooth;
     }
+
+    public Boolean getAmbilight() {
+        return ambilight;
+    }
+
+    public void setAmbilight(Boolean ambilight) {
+        this.ambilight = ambilight;
+    }
+
     public Integer getOriginalStock() {
         return originalStock;
     }
+
     public void setOriginalStock(Integer originalStock) {
         this.originalStock = originalStock;
     }
+
     public Integer getSold() {
         return sold;
     }
+
     public void setSold(Integer sold) {
         this.sold = sold;
     }
-
 }
+
 
